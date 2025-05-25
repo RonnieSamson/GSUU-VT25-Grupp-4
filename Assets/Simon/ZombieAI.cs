@@ -10,12 +10,12 @@ public class ZombieAI : MonoBehaviour
     void Start()
     {
         nm = GetComponent<NavMeshAgent>();
-        nm.SetDestination(target.position);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        nm.SetDestination(target.position);
     }
 }
