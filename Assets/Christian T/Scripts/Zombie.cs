@@ -7,7 +7,7 @@ public class Zombie : MonoBehaviour, IDamageable
     public void TakeDamage(float amount)
     {
         health -= amount;
-        Debug.Log("Zombie took damage: " + amount);
+        Debug.Log(amount);
 
         if (health <= 0)
         {

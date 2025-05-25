@@ -1,11 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewWeapon", menuName = "Weapon/Create New Weapon")]
+[CreateAssetMenu(fileName = "NewWeaponData", menuName = "Weapon Data", order = 1)]
 public class WeaponData : ScriptableObject
 {
-    public string weaponName;
-    public float damage;
-    public float range;
-    public float fireRate;
-    public bool isMelee;
+    public float damage = 20f;
+    public float range = 100f;
+    public float fireRate = 2f;
+    public float reloadTime = 1.5f;
+
+    public int maxAmmo = 10;
+    public bool isMelee = false;
 }
