@@ -1,102 +1,145 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Assertions.Must;
 
 public class ZombieAI : MonoBehaviour
 {
-
     public enum AIState
     {
-        idle,
-        moving,
-        running,
-        attacking
+        Idle,
+        Moving,
+        Running,
+        Attacking
     }
 
-    public AIState aistate = AIState.idle;
+    [Header("Zombie Settings")]
+    public float zombieHealth = 100f;
+    public float zombieDamage = 10f;
+    public float attackCooldown = 1.5f;
 
-    NavMeshAgent nm;
-    Transform player;
-    public float zombieHealth = 100;
-    public float zombieDamage = 10;
+    [Header("AI State")]
+    public AIState aistate = AIState.Idle;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private float lastAttackTime = -1f;
+    private NavMeshAgent agent;
+    private Transform player;
+    private Animator animator;
+
+    private const float attackRange = 0.8f;
+    private const float disengageRange = 0.9f;
+    private const float chaseDistance = 8f;
+    private const float stopChasingDistance = 12f;
+
+    private void Start()
     {
-        nm = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform; //Find gameobject with tag Player
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
         switch (aistate)
         {
-            case AIState.idle:
-                //If player within X range OR in line of sight, start moving towards palyer.
-                if (Vector2.Distance(gameObject.transform.position, player.position) < 8)
-                {
-                    aistate = AIState.moving;
-                }
+            case AIState.Idle:
+                HandleIdleState(distanceToPlayer);
                 break;
 
-            case AIState.moving:
-                if (Vector2.Distance(gameObject.transform.position, player.position) < 0.8f)
-                {
-                    aistate = AIState.attacking;
-                    break;
-                }
-
-                if (Vector2.Distance(gameObject.transform.position, player.position) > 12)
-                {
-                    aistate = AIState.running;
-                    break;
-                }
-                nm.speed = 5;
-                nm.acceleration = 12;
-                nm.stoppingDistance = 0.2f;
-
-                nm.SetDestination(player.position);
+            case AIState.Moving:
+                HandleMovingState(distanceToPlayer);
                 break;
 
-            case AIState.running:
-                if (Vector2.Distance(gameObject.transform.position, player.position) < 0.8f)
-                {
-                    aistate = AIState.attacking;
-                    break;
-                }
-
-                if (Vector2.Distance(gameObject.transform.position, player.position) < 12)
-                {
-                    aistate = AIState.moving;
-                    break;
-                }
-                nm.speed = 8;
-                nm.acceleration = 6;
-                nm.stoppingDistance = 0.2f;
-
-                nm.SetDestination(player.position);
+            case AIState.Running:
+                HandleRunningState(distanceToPlayer);
                 break;
 
-            case AIState.attacking:
-                if (Vector2.Distance(gameObject.transform.position, player.position) > 0.8f)
-                {
-                    aistate = AIState.moving;
-                    break;
-                }
-
-                //Play animation
-                //HealthManager.Health - zombieDamage;
-                //Maybe call on a different manager that takes cares of everything?
-                //For example here I call EventManager.PlayerDamage(zombieDamage)
-                //And inside of the EventManager it takes care of;  1. changing the health value 2.play audio 3. play visual effects.
-
-                break;
-
-            default:
-
+            case AIState.Attacking:
+                HandleAttackingState(distanceToPlayer);
                 break;
         }
-        
+    }
+
+    private void HandleIdleState(float distanceToPlayer)
+    {
+        if (distanceToPlayer < chaseDistance)
+        {
+            Debug.Log("Idle > Moving");
+            aistate = AIState.Moving;
+        }
+    }
+
+    private void HandleMovingState(float distanceToPlayer)
+    {
+        if (distanceToPlayer < attackRange)
+        {
+            Debug.Log("Moving > Attacking");
+            aistate = AIState.Attacking;
+            return;
+        }
+
+        if (distanceToPlayer > stopChasingDistance)
+        {
+            Debug.Log("Moving > Running");
+            aistate = AIState.Running;
+            return;
+        }
+
+        animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime);
+        agent.speed = 2f;
+        agent.acceleration = 1.5f;
+        agent.stoppingDistance = 0.1f;
+        agent.SetDestination(player.position);
+    }
+
+    private void HandleRunningState(float distanceToPlayer)
+    {
+        if (distanceToPlayer < attackRange)
+        {
+            Debug.Log("Running > Attacking");
+            aistate = AIState.Attacking;
+            return;
+        }
+
+        if (distanceToPlayer < stopChasingDistance)
+        {
+            Debug.Log("Running > Moving");
+            aistate = AIState.Moving;
+            return;
+        }
+
+        animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime);
+        agent.speed = 4f;
+        agent.acceleration = 2f;
+        agent.stoppingDistance = 0.3f;
+        agent.SetDestination(player.position);
+    }
+
+    private void HandleAttackingState(float distanceToPlayer)
+    {
+        if (distanceToPlayer > disengageRange)
+        {
+            Debug.Log("Attacking > Moving");
+            aistate = AIState.Moving;
+            return;
+        }
+
+        // Stop movement and play idle animation
+        agent.SetDestination(transform.position);
+        animator.SetFloat("Speed", 0f, 0.3f, Time.deltaTime);
+
+        // Cooldown check
+        if (Time.time >= lastAttackTime + attackCooldown)
+        {
+            Debug.Log("Zombie Attacks!");
+            animator.SetTrigger("IsAttacking");
+            lastAttackTime = Time.time;
+
+            //Play animation
+            //HealthManager.Health - zombieDamage;
+            //Maybe call on a different manager that takes cares of everything?
+            //For example here I call EventManager.PlayerDamage(zombieDamage)
+            //And inside of the EventManager it takes care of;  1. changing the health value 2.play audio 3. play visual effects.
+        }
     }
 }
