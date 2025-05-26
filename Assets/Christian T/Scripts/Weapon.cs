@@ -9,11 +9,14 @@ public class Weapon : MonoBehaviour
 
     private float nextFireTime = 0f;
     private int currentAmmo;
+
+    private int totalAmmo; 
     private bool isReloading = false;
 
     void Start()
     {
         currentAmmo = weaponData.maxAmmo;
+        totalAmmo = weaponData.maxAmmo * 2;
     }
 
     void Update()
@@ -41,23 +44,29 @@ public class Weapon : MonoBehaviour
     }
 
     IEnumerator Reload()
-    {
-        isReloading = true;
+{
+    isReloading = true;
+    Debug.Log("Reloading...");
+    
+    if (animator != null)
+        animator.SetBool("Reload", true);
 
-        Debug.Log("Reloading...");
-        if (animator != null)
-            animator.SetBool("Reload", true);
+    yield return new WaitForSeconds(weaponData.reloadTime);
 
-        yield return new WaitForSeconds(weaponData.reloadTime);
+    int ammoNeeded = weaponData.maxAmmo - currentAmmo;
+    int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
 
-        currentAmmo = weaponData.maxAmmo;
-        isReloading = false;
+    currentAmmo += ammoToReload;
+    totalAmmo -= ammoToReload;
 
-        if (animator != null)
-            animator.SetBool("Reload", false);
+    isReloading = false;
 
-        Debug.Log("Reload klar!");
-    }
+    if (animator != null)
+        animator.SetBool("Reload", false);
+
+    Debug.Log("Reload klar! Ammo: " + currentAmmo + "/" + totalAmmo);
+}
+
 
     void Shoot()
     {
