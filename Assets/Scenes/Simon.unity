@@ -1254,6 +1254,31 @@ MonoBehaviour:
   zombieHealth: 100
   zombieDamage: 10
   attackCooldown: 2
+  ragdollBodies:
+  - {fileID: 185344277}
+  - {fileID: 499512327}
+  - {fileID: 580040591}
+  - {fileID: 177577880}
+  - {fileID: 1391389260}
+  - {fileID: 121808749}
+  - {fileID: 1982399897}
+  - {fileID: 123796287}
+  - {fileID: 440488784}
+  - {fileID: 742333389}
+  - {fileID: 1670854896}
+  ragdollColliders:
+  - {fileID: 185344278}
+  - {fileID: 499512328}
+  - {fileID: 580040592}
+  - {fileID: 177577881}
+  - {fileID: 1391389261}
+  - {fileID: 121808750}
+  - {fileID: 1982399899}
+  - {fileID: 123796289}
+  - {fileID: 440488786}
+  - {fileID: 742333391}
+  - {fileID: 1670854898}
+  mainCollider: {fileID: 121808750}
   aistate: 0
 --- !u!195 &579861352
 NavMeshAgent:
