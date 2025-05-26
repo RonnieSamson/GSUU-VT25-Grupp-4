@@ -12,6 +12,16 @@ public class Weapon : MonoBehaviour
 
     private int totalAmmo; 
     private bool isReloading = false;
+    public int GetCurrentAmmo()
+    {
+        return currentAmmo;
+    }
+
+    public int GetTotalAmmo()
+    {
+        return totalAmmo;
+    }
+
 
     void Start()
     {
