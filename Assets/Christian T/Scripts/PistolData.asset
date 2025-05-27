@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 20
   range: 1000
-  fireRate: 10
+  fireRate: 2
   reloadTime: 1.5
   maxAmmo: 10
   isMelee: 0
