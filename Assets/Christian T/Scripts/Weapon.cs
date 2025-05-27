@@ -36,7 +36,11 @@ public class Weapon : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            StartCoroutine(Reload());
+            // Kolla om magasinet redan är fullt
+            if (currentAmmo < weaponData.maxAmmo && totalAmmo > 0)
+            {
+                StartCoroutine(Reload());
+            }
             return;
         }
 
@@ -52,6 +56,7 @@ public class Weapon : MonoBehaviour
             Shoot();
         }
     }
+
 
     IEnumerator Reload()
 {
