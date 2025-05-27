@@ -45,7 +45,7 @@ public class ZombieAI : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        switch (aistate)
+        switch (aistate) //Handling AI states depending on context. Default is idle, if in range then moving/running, else if within close range then attack
         {
             case AIState.Idle:
                 HandleIdleState(distanceToPlayer);
@@ -103,7 +103,7 @@ public class ZombieAI : MonoBehaviour
             return;
         }
 
-        animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime);
+        animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime); 
         agent.speed = 4f;
         agent.acceleration = 2f;
         agent.stoppingDistance = 0.3f;
@@ -126,7 +126,6 @@ public class ZombieAI : MonoBehaviour
             animator.SetTrigger("IsAttacking");
             lastAttackTime = Time.time;
 
-
             //Play animation
             //HealthManager.Health - zombieDamage;
             //Maybe call on a different manager that takes cares of everything?
@@ -134,8 +133,6 @@ public class ZombieAI : MonoBehaviour
             //And inside of the EventManager it takes care of;  1. changing the health value 2.play audio 3. play visual effects.
         }
     }
-
-    // Called from another script or player attack
     public void TakeDamage(float amount)
     {
         if (isDead) return;
@@ -157,7 +154,6 @@ public class ZombieAI : MonoBehaviour
         animator.enabled = false;
         mainCollider.enabled = false;
 
-        // Enable ragdoll
         EnableRagdoll();
 
         // Destroy zombie after 30 seconds for performance
