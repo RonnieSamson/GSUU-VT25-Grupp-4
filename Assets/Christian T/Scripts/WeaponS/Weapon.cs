@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour
     public WeaponData weaponData;
     public Transform firePoint;
     public Animator animator;
+    public GameObject bloodEffect;
 
     private float nextFireTime = 0f;
     private int currentAmmo;
@@ -88,15 +89,27 @@ public class Weapon : MonoBehaviour
         currentAmmo--;
 
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Debug.DrawRay(ray.origin, ray.direction * weaponData.range, Color.red, 1f); //Debug for seeing where the raycast hits
+
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, weaponData.range))
         {
-            IDamageable target = hit.transform.GetComponent<IDamageable>();
+            Debug.Log("Ray hit: " + hit.transform.name);
+            IDamageable target = hit.transform.GetComponentInParent<IDamageable>(); //Travel up the hierarchy to find the IDamageable in the Zombie root, as long as it hits the zombie
+
             if (target != null)
             {
                 target.TakeDamage(weaponData.damage);
                 Debug.Log("Sköt fiende: " + weaponData.damage + " skada");
+
+                if (bloodEffect != null)
+                {
+                    // Spawn the blood at the exact hit point and orient it to match surface
+                    GameObject blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal)); //Trigger the particle system with the correct rotations based on the raycast - zombie interaction
+                    
+                    Destroy(blood, 2f); // Auto-destroy after 2 seconds
+                }
             }
         }
 

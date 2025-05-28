@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class ZombieAI : MonoBehaviour
+public class ZombieAI : MonoBehaviour, IDamageable
 {
     public enum AIState { Idle, Moving, Running, Attacking }
 
@@ -139,6 +139,7 @@ public class ZombieAI : MonoBehaviour
 
         zombieHealth -= amount;
         animator.SetTrigger("IsHit");
+        Debug.Log("Zombie HP: " + zombieHealth);
 
         if (zombieHealth <= 0)
         {
@@ -166,11 +167,6 @@ public class ZombieAI : MonoBehaviour
         {
             rb.isKinematic = false;
         }
-
-        foreach (var col in ragdollColliders)
-        {
-            col.enabled = true;
-        }
     }
 
     private void DisableRagdoll()
@@ -178,11 +174,6 @@ public class ZombieAI : MonoBehaviour
         foreach (var rb in ragdollBodies)
         {
             rb.isKinematic = true;
-        }
-
-        foreach (var col in ragdollColliders)
-        {
-            col.enabled = false;
         }
     }
 }
