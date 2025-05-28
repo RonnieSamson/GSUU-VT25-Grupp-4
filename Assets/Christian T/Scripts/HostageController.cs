@@ -7,7 +7,7 @@ public class HostageController : MonoBehaviour
     public Transform player;
     public float interactDistance = 3f;
 
-    public Transform destinationArea; // Plane eller område hostagen ska gå till
+    public Transform destinationArea; 
     private NavMeshAgent agent;
 
     private bool isEscorting = false;
@@ -49,10 +49,9 @@ public class HostageController : MonoBehaviour
 
         if (isEscorting && agent.isOnNavMesh)
         {
-            // Animation beroende på hastighet
             animator.SetBool("isRunning", agent.velocity.magnitude > 0.1f);
 
-            // Om destination är nådd
+
             if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
             {
                 animator.SetBool("isRunning", false);
@@ -66,7 +65,7 @@ public class HostageController : MonoBehaviour
     private Vector3 GetRandomPointInArea()
     {
         Vector3 center = destinationArea.position;
-        Vector3 size = destinationArea.localScale * 10f; // Unity Plane är 10x10 per scale 1
+        Vector3 size = destinationArea.localScale * 10f; 
 
         float offsetX = Random.Range(-size.x / 2f, size.x / 2f);
         float offsetZ = Random.Range(-size.z / 2f, size.z / 2f);
