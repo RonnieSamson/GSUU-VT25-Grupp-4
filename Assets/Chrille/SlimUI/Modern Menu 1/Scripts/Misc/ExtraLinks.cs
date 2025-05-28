@@ -7,15 +7,15 @@ namespace SlimUI.ModernMenu{
     public class ExtraLinks : MonoBehaviour
     {
 
-        public string[] scenes = { "Chrille", "Dock Thing" };
+        
         public void OpenChrille()
         {
-            SceneManager.LoadScene(scenes[0]);
+            SceneManager.LoadScene("Chrille");
         }
         
         public void OpenDockThing()
         {
-            SceneManager.LoadScene(scenes[1]);
+            SceneManager.LoadScene("DockThing");
         }
 
     }
