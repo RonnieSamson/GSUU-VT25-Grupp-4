@@ -1180,7 +1180,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2076510855}
         m_TargetAssemblyTypeName: SlimUI.ModernMenu.ExtraLinks, Assembly-CSharp
-        m_MethodName: OpenChrille
+        m_MethodName: OpenDockThing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
