@@ -3,20 +3,22 @@ using UnityEngine.AI;
 
 public class HostageController : MonoBehaviour
 {
-    private Animator animator;       // Privat, hämtas automatiskt
+    private Animator animator;
     public Transform player;
     public float interactDistance = 3f;
 
-    public Transform destinationPoint;
+    public Transform destinationArea; // Plane eller område hostagen ska gå till
     private NavMeshAgent agent;
 
     private bool isEscorting = false;
 
+    public RescueManager rescueManager;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();  // Hämta Animator-komponenten automatiskt
-    
+        animator = GetComponent<Animator>();
+
         if (agent == null)
         {
             Debug.LogError("NavMeshAgent saknas på hostagen");
@@ -41,29 +43,34 @@ public class HostageController : MonoBehaviour
             {
                 Debug.Log("Start escorting");
                 isEscorting = true;
-                agent.SetDestination(destinationPoint.position);
+                agent.SetDestination(GetRandomPointInArea());
             }
         }
 
         if (isEscorting && agent.isOnNavMesh)
         {
-            // Uppdatera animation beroende på rörelse
-            if (agent.velocity.magnitude > 0.1f)
-            {
-                animator.SetBool("isRunning", true);
-            }
-            else
-            {
-                animator.SetBool("isRunning", false);
-            }
+            // Animation beroende på hastighet
+            animator.SetBool("isRunning", agent.velocity.magnitude > 0.1f);
 
-            // Stoppa när hostagen når destinationen
+            // Om destination är nådd
             if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
             {
                 animator.SetBool("isRunning", false);
                 isEscorting = false;
+                rescueManager.HostageRescued();
                 Debug.Log("Hostage reached destination");
             }
         }
+    }
+
+    private Vector3 GetRandomPointInArea()
+    {
+        Vector3 center = destinationArea.position;
+        Vector3 size = destinationArea.localScale * 10f; // Unity Plane är 10x10 per scale 1
+
+        float offsetX = Random.Range(-size.x / 2f, size.x / 2f);
+        float offsetZ = Random.Range(-size.z / 2f, size.z / 2f);
+
+        return new Vector3(center.x + offsetX, center.y, center.z + offsetZ);
     }
 }
