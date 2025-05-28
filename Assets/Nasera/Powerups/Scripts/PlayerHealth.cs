@@ -9,6 +9,10 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+
+        // Visa hjärtan direkt när spelet startar
+        if (heartsUIManager != null)
+            heartsUIManager.UpdateHearts();
     }
 
     public HeartsUIManager heartsUIManager;
