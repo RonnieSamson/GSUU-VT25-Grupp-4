@@ -96,7 +96,7 @@ public class Weapon : MonoBehaviour
         if (Physics.Raycast(ray, out hit, weaponData.range))
         {
             Debug.Log("Ray hit: " + hit.transform.name);
-            IDamageable target = hit.transform.GetComponentInParent<IDamageable>(); //Travel up the hierarchy to find the IDamageable in the Zombie root, as long as it hits the zombie
+            IDamageable target = hit.transform.GetComponentInParent<IDamageable>();
 
             if (target != null)
             {
@@ -105,11 +105,11 @@ public class Weapon : MonoBehaviour
 
                 if (bloodEffect != null)
                 {
-                    // Spawn the blood at the exact hit point and orient it to match surface
-                    GameObject blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal)); //Trigger the particle system with the correct rotations based on the raycast - zombie interaction
-                    
-                    Destroy(blood, 2f); // Auto-destroy after 2 seconds
+                    GameObject blood = Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(blood, 2f);
                 }
+
+                DismemberPart(hit.transform);
             }
         }
 
@@ -119,6 +119,56 @@ public class Weapon : MonoBehaviour
             StartCoroutine(ResetBool("Shoot", 1f / weaponData.fireRate));
         }
     }
+
+    void DismemberPart(Transform hitTransform)
+    {
+        // List of allowed bones for dismemberment
+        string[] allowedLimbs = { "upperarm_l", "lowerarm_l", "upperarm_r", "lowerarm_r", "Head" };
+
+        bool canDismember = false;
+        foreach (var limb in allowedLimbs)
+        {
+            if (hitTransform.name.ToLower().Contains(limb.ToLower()))
+            {
+                canDismember = true;
+                break;
+            }
+        }
+
+        if (!canDismember)
+        {
+            Debug.Log("Hit part is not dismemberable: " + hitTransform.name);
+            return;
+        }
+
+        // Recursive function to remove all visible mesh parts in subtree
+        void RemoveMeshParts(Transform current)
+        {
+            // If it’s a visible mesh part, destroy it
+            if (current.GetComponent<MeshRenderer>() != null || current.GetComponent<SkinnedMeshRenderer>() != null)
+            {
+                if (bloodEffect != null)
+                {
+                    GameObject blood = Instantiate(bloodEffect, current.position, Quaternion.identity);
+                    Destroy(blood, 2f);
+                }
+
+                Destroy(current.gameObject);
+                Debug.Log("Removed mesh part: " + current.name);
+                return; // Stop here, don't go deeper if this mesh is removed
+            }
+
+            // Otherwise, go deeper
+            foreach (Transform child in current)
+            {
+                RemoveMeshParts(child);
+            }
+        }
+
+        RemoveMeshParts(hitTransform);
+    }
+
+
 
     IEnumerator ResetBool(string param, float delay)
     {
