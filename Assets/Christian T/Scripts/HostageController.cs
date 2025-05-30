@@ -13,6 +13,7 @@ public class HostageController : MonoBehaviour
     private bool isEscorting = false;
 
     public RescueManager rescueManager;
+    
 
     void Start()
     {

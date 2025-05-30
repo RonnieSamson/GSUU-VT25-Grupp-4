@@ -6,6 +6,8 @@ public class HostageHealth : MonoBehaviour, IDamageable
     public float maxHealth = 100f;
     private float currentHealth;
     private bool isDead = false;
+    public GameOverUIManager gameOverUIManager;
+
 
     private HostageController hostageController;
 
@@ -44,7 +46,11 @@ public class HostageHealth : MonoBehaviour, IDamageable
 
         Debug.Log("Hostagen dog.");
 
-        // Ta bort objektet efter 1 sekund
+        // Visa Game Over-skärmen
+        if (gameOverUIManager != null)
+            gameOverUIManager.ShowGameOverScreen();
+
         Destroy(gameObject, 1f);
     }
+
 }
