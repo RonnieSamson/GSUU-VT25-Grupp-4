@@ -10,8 +10,10 @@ public class Weapon : MonoBehaviour
 
     private float nextFireTime = 0f;
     private int currentAmmo;
+    public AmmoUI ammoUI;
 
-    private int totalAmmo; 
+    private int totalAmmo;
+    private int totalMagazines;
     private bool isReloading = false;
     public int GetCurrentAmmo()
     {
@@ -60,28 +62,28 @@ public class Weapon : MonoBehaviour
 
 
     IEnumerator Reload()
-{
-    isReloading = true;
-    Debug.Log("Reloading...");
-    
-    if (animator != null)
-        animator.SetBool("Reload", true);
+    {
+        isReloading = true;
+        Debug.Log("Reloading...");
 
-    yield return new WaitForSeconds(weaponData.reloadTime);
+        if (animator != null)
+            animator.SetBool("Reload", true);
 
-    int ammoNeeded = weaponData.maxAmmo - currentAmmo;
-    int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
+        yield return new WaitForSeconds(weaponData.reloadTime);
 
-    currentAmmo += ammoToReload;
-    totalAmmo -= ammoToReload;
+        int ammoNeeded = weaponData.maxAmmo - currentAmmo;
+        int ammoToReload = Mathf.Min(ammoNeeded, totalAmmo);
 
-    isReloading = false;
+        currentAmmo += ammoToReload;
+        totalAmmo -= ammoToReload;
 
-    if (animator != null)
-        animator.SetBool("Reload", false);
+        isReloading = false;
 
-    Debug.Log("Reload klar! Ammo: " + currentAmmo + "/" + totalAmmo);
-}
+        if (animator != null)
+            animator.SetBool("Reload", false);
+
+        Debug.Log("Reload klar! Ammo: " + currentAmmo + "/" + totalAmmo);
+    }
 
 
     void Shoot()
@@ -119,6 +121,18 @@ public class Weapon : MonoBehaviour
             StartCoroutine(ResetBool("Shoot", 1f / weaponData.fireRate));
         }
     }
+    public void AddMagazine(int amount)
+    {
+        int ammoToAdd = amount * weaponData.maxAmmo;
+        totalAmmo += ammoToAdd;
+
+        Debug.Log($"Plockade upp ammo! Lade till {ammoToAdd} skott. Nuvarande ammo: {currentAmmo}/{totalAmmo}");
+
+        if (ammoUI != null)
+            ammoUI.UpdateAmmoText();
+    }
+
+
 
     void DismemberPart(Transform hitTransform)
     {
@@ -176,4 +190,5 @@ public class Weapon : MonoBehaviour
         if (animator != null)
             animator.SetBool(param, false);
     }
+    
 }
