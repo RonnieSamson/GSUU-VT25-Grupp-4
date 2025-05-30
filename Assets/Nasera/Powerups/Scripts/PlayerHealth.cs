@@ -6,6 +6,9 @@ public class PlayerHealth : MonoBehaviour
     public float currentHealth = 3f;
     public float maxHealth = 3f;
 
+
+    public HeartsUIManager heartsUIManager;
+    public GameObject gameOverPanel;
     void Start()
     {
         currentHealth = maxHealth;
@@ -13,9 +16,11 @@ public class PlayerHealth : MonoBehaviour
         // Visa hjärtan direkt när spelet startar
         if (heartsUIManager != null)
             heartsUIManager.UpdateHearts();
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
     }
 
-    public HeartsUIManager heartsUIManager;
     public void IncreaseHealth(float amount)
     {
         currentHealth += amount;
@@ -40,7 +45,12 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("Player died!");
             gameObject.SetActive(false);
+
+
+            if (gameOverPanel != null)
+                gameOverPanel.SetActive(true);
         }
+
     }
 }
 
