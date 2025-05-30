@@ -13,4 +13,8 @@ public class AmmoUI : MonoBehaviour
             ammoText.text = $"{weapon.GetCurrentAmmo()} / {weapon.GetTotalAmmo()}";
         }
     }
+    public void UpdateAmmoText()
+    {
+        ammoText.text = weapon.GetCurrentAmmo() + " / " + weapon.GetTotalAmmo();
+    }
 }
