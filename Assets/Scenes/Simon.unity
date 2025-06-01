@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 347215484}
   m_Layer: 0
   m_Name: MockPlayer
-  m_TagString: Untagged
+  m_TagString: Hostage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -428,7 +428,7 @@ Transform:
   m_GameObject: {fileID: 347215483}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.03, y: 3, z: -9.014}
+  m_LocalPosition: {x: -7.03, y: 1.34, z: 1.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1865,6 +1865,7 @@ MonoBehaviour:
   firePoint: {fileID: 401749379}
   animator: {fileID: 1201817964}
   bloodEffect: {fileID: 2088931153433625967, guid: f58b6138d2ad8134589e5f626dbe5da0, type: 3}
+  ammoUI: {fileID: 0}
 --- !u!1 &1724086469
 GameObject:
   m_ObjectHideFlags: 0
