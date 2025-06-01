@@ -26,12 +26,12 @@ public class Knife : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, weaponData.range))
         {
-            IDamageable target = hit.transform.GetComponent<IDamageable>();
+            IDamageable target = hit.transform.GetComponentInParent<IDamageable>();
             if (target != null)
             {
                 target.TakeDamage(weaponData.damage);
-                Debug.Log(weaponData.damage);
             }
         }
     }
+
 }
