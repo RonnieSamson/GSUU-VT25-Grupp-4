@@ -11,9 +11,10 @@ public class HostageController : MonoBehaviour
     private NavMeshAgent agent;
 
     private bool isEscorting = false;
-
-    public RescueManager rescueManager;
     
+    public RescueManager rescueManager;
+    public bool isSitting => !isEscorting;
+
 
     void Start()
     {

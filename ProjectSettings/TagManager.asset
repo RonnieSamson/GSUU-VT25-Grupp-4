@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Hostage
+  - Zombie
   layers:
   - Default
   - TransparentFX
