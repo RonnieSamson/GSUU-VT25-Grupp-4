@@ -116,57 +116,90 @@ public class ZombieAI : MonoBehaviour, IDamageable
     }
 
     private void HandleAttackingState(float distanceToTarget)
+{
+    if (target == null || !target.gameObject.activeInHierarchy)
     {
-        if (distanceToTarget > disengageRange)
+        UpdateTarget(); 
+        aistate = AIState.Moving;
+        return;
+    }
+
+    //Slutar attackera om hostage sitter ner
+    if (target.CompareTag("Hostage"))
+    {
+        HostageController controller = target.GetComponent<HostageController>();
+        if (controller != null && controller.isSitting)
         {
-            aistate = AIState.Moving;
+            Debug.Log("Zombie avbryter attack – hostagen sitter.");
+            aistate = AIState.Idle;
             return;
         }
+    }
 
-        agent.SetDestination(transform.position);
-        animator.SetFloat("Speed", 0f, 0.3f, Time.deltaTime);
+    if (distanceToTarget > disengageRange)
+    {
+        aistate = AIState.Moving;
+        return;
+    }
 
-        if (Time.time >= lastAttackTime + attackCooldown)
+    agent.SetDestination(transform.position); 
+    animator.SetFloat("Speed", 0f, 0.3f, Time.deltaTime);
+
+    if (Time.time >= lastAttackTime + attackCooldown)
+    {
+        animator.SetTrigger("IsAttacking");
+        lastAttackTime = Time.time;
+
+        IDamageable damageable = target.GetComponent<IDamageable>();
+        if (damageable != null && distanceToTarget <= attackRange)
         {
-            animator.SetTrigger("IsAttacking");
-            lastAttackTime = Time.time;
-
+            damageable.TakeDamage(zombieDamage);
+            Debug.Log("Zombie attackerade " + target.name + " och gjorde " + zombieDamage + " damage.");
+        }
+        else
+        {
+            Debug.Log("Target saknar IDamageable eller är utanför räckvidd.");
+        }
+    }
+}
             //Play animation
             //HealthManager.Health - zombieDamage;
             //Maybe call on a different manager that takes cares of everything?
             //For example here I call EventManager.PlayerDamage(zombieDamage)
             //And inside of the EventManager it takes care of;  1. changing the health value 2.play audio 3. play visual effects.
-        }
-    }
 
     private void UpdateTarget()
+{
+    Transform closestHostage = null;
+    float closestHostageDistance = Mathf.Infinity;
+
+    foreach (GameObject hostage in hostages)
     {
-        Transform closestHostage = null;
-        float closestHostageDistance = Mathf.Infinity;
+        if (hostage == null) continue;
 
-        foreach (GameObject hostage in hostages)
+        HostageController controller = hostage.GetComponent<HostageController>();
+        if (controller != null && controller.isSitting) continue; // Ignorera sittande hostages
+
+        float dist = Vector3.Distance(transform.position, hostage.transform.position);
+        if (dist < closestHostageDistance)
         {
-            if (hostage == null) continue;
-
-            float dist = Vector3.Distance(transform.position, hostage.transform.position);
-            if (dist < closestHostageDistance)
-            {
-                closestHostageDistance = dist;
-                closestHostage = hostage.transform;
-            }
-        }
-
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        if (closestHostage != null && closestHostageDistance < distanceToPlayer)
-        {
-            target = closestHostage;
-        }
-        else
-        {
-            target = player;
+            closestHostageDistance = dist;
+            closestHostage = hostage.transform;
         }
     }
+
+
+    float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+    if (closestHostage != null && closestHostageDistance < distanceToPlayer)
+    {
+        target = closestHostage;
+    }
+    else
+    {
+        target = player;
+    }
+}
 
     public void TakeDamage(float amount)
     {

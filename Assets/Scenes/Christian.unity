@@ -548,6 +548,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 692015001346291469, guid: 4a2128b910d80c145a14616575f0a23b, type: 3}
+      propertyPath: attackCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1189353663044977184, guid: 4a2128b910d80c145a14616575f0a23b, type: 3}
+      propertyPath: m_Speed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2062980924722598520, guid: 4a2128b910d80c145a14616575f0a23b, type: 3}
       propertyPath: m_Name
       value: Zombie (1)
@@ -617,7 +625,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 0.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -657,7 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869ef498599859e4c961a27142d49588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 600
   gameOverUIManager: {fileID: 0}
 --- !u!1 &653836119
 GameObject:
@@ -2013,7 +2021,7 @@ Transform:
   m_GameObject: {fileID: 1703957844}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2322,6 +2330,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4273394152787571250, guid: 9465253e095e630479519de8d7a8e620, type: 3}
+      propertyPath: m_Speed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6527617668475243745, guid: 9465253e095e630479519de8d7a8e620, type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6527617668475243745, guid: 9465253e095e630479519de8d7a8e620, type: 3}
       propertyPath: gameOverUIManager
       value: 
