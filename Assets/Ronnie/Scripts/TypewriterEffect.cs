@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // <-- NYTT!
 
 public class TypewriterEffect : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class TypewriterEffect : MonoBehaviour
     public float delay = 0.05f;
 
     public AudioSource audioSource;
-    public AudioClip[] typeKeySounds; // för slumpmässigt val mellan t.ex. TypeKey01/02
+    public AudioClip[] typeKeySounds;
     public AudioClip enterSound;
 
     private void Start()
@@ -26,19 +27,21 @@ public class TypewriterEffect : MonoBehaviour
             char c = fullText[i];
             uiText.text += c;
 
-            // Ljud för radbrytning
             if (c == '\n')
             {
                 PlaySound(enterSound);
             }
-            // Ljud för vanliga tecken
-            else if (!char.IsWhiteSpace(c)) // undvik ljud för mellanslag
+            else if (!char.IsWhiteSpace(c))
             {
                 PlaySound(typeKeySounds[Random.Range(0, typeKeySounds.Length)]);
             }
 
             yield return new WaitForSeconds(delay);
         }
+
+        // Vänta 2 sek efter att texten är klar och byt scen
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("DockThing"); // <- byt till exakt namn på din scen
     }
 
     void PlaySound(AudioClip clip)
