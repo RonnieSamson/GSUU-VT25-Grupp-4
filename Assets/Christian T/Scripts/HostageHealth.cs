@@ -50,7 +50,8 @@ public class HostageHealth : MonoBehaviour, IDamageable
         if (gameOverUIManager != null)
             gameOverUIManager.ShowGameOverScreen();
 
-        Destroy(gameObject, 1f);
+        Destroy(gameObject);
+
     }
 
 }
