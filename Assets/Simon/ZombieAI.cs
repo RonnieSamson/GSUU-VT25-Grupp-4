@@ -116,7 +116,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     }
 
     private void HandleAttackingState(float distanceToTarget)
-{
+    {
     if (target == null || !target.gameObject.activeInHierarchy)
     {
         UpdateTarget(); 
@@ -161,45 +161,41 @@ public class ZombieAI : MonoBehaviour, IDamageable
             Debug.Log("Target saknar IDamageable eller är utanför räckvidd.");
         }
     }
-}
-            //Play animation
-            //HealthManager.Health - zombieDamage;
-            //Maybe call on a different manager that takes cares of everything?
-            //For example here I call EventManager.PlayerDamage(zombieDamage)
-            //And inside of the EventManager it takes care of;  1. changing the health value 2.play audio 3. play visual effects.
+    }
 
     private void UpdateTarget()
-{
-    Transform closestHostage = null;
-    float closestHostageDistance = Mathf.Infinity;
-
-    foreach (GameObject hostage in hostages)
     {
-        if (hostage == null) continue;
 
-        HostageController controller = hostage.GetComponent<HostageController>();
-        if (controller != null && controller.isSitting) continue; // Ignorera sittande hostages
+        Transform closestHostage = null;
+        float closestHostageDistance = Mathf.Infinity;
 
-        float dist = Vector3.Distance(transform.position, hostage.transform.position);
-        if (dist < closestHostageDistance)
+        foreach (GameObject hostage in hostages)
         {
-            closestHostageDistance = dist;
-            closestHostage = hostage.transform;
+            if (hostage == null) continue;
+
+            HostageController controller = hostage.GetComponent<HostageController>();
+            if (controller != null && controller.isSitting) continue; // Ignorera sittande hostages
+
+            float dist = Vector3.Distance(transform.position, hostage.transform.position);
+            if (dist < closestHostageDistance)
+            {
+                closestHostageDistance = dist;
+                closestHostage = hostage.transform;
+            }
+        }
+
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (closestHostage != null && closestHostageDistance < distanceToPlayer)
+        {
+            target = closestHostage;
+        }
+        else
+        {
+            target = player;
         }
     }
-
-
-    float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-    if (closestHostage != null && closestHostageDistance < distanceToPlayer)
-    {
-        target = closestHostage;
-    }
-    else
-    {
-        target = player;
-    }
-}
 
     public void TakeDamage(float amount)
     {
