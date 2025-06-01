@@ -22,6 +22,9 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private NavMeshAgent agent;
     private Transform player;
     private Animator animator;
+    private GameObject[] hostages; // cache hostage GameObjects
+    private Transform target;
+
 
     private const float attackRange = 2f;
     private const float disengageRange = 3f;
@@ -35,6 +38,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        hostages = GameObject.FindGameObjectsWithTag("Hostage");
 
         DisableRagdoll();
     }
@@ -43,76 +47,77 @@ public class ZombieAI : MonoBehaviour, IDamageable
     {
         if (isDead) return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        UpdateTarget();
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
         switch (aistate) //Handling AI states depending on context. Default is idle, if in range then moving/running, else if within close range then attack
         {
             case AIState.Idle:
-                HandleIdleState(distanceToPlayer);
+                HandleIdleState(distanceToTarget);
                 break;
             case AIState.Moving:
-                HandleMovingState(distanceToPlayer);
+                HandleMovingState(distanceToTarget);
                 break;
             case AIState.Running:
-                HandleRunningState(distanceToPlayer);
+                HandleRunningState(distanceToTarget);
                 break;
             case AIState.Attacking:
-                HandleAttackingState(distanceToPlayer);
+                HandleAttackingState(distanceToTarget);
                 break;
         }
     }
 
-    private void HandleIdleState(float distanceToPlayer)
+    private void HandleIdleState(float distanceToTarget)
     {
-        if (distanceToPlayer < chaseDistance)
+        if (distanceToTarget < chaseDistance)
             aistate = AIState.Moving;
     }
 
-    private void HandleMovingState(float distanceToPlayer)
+    private void HandleMovingState(float distanceToTarget)
     {
-        if (distanceToPlayer < attackRange)
+        if (distanceToTarget < attackRange)
         {
             aistate = AIState.Attacking;
             return;
         }
 
-        if (distanceToPlayer > stopChasingDistance)
+        if (distanceToTarget > stopChasingDistance)
         {
             aistate = AIState.Running;
             return;
         }
 
         animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime);
-        agent.speed = 2f;
+        agent.speed = 1.5f;
         agent.acceleration = 1.5f;
         agent.stoppingDistance = 0.1f;
-        agent.SetDestination(player.position);
+        agent.SetDestination(target.position);
     }
 
-    private void HandleRunningState(float distanceToPlayer)
+    private void HandleRunningState(float distanceToTarget)
     {
-        if (distanceToPlayer < attackRange)
+        if (distanceToTarget < attackRange)
         {
             aistate = AIState.Attacking;
             return;
         }
 
-        if (distanceToPlayer < stopChasingDistance)
+        if (distanceToTarget < stopChasingDistance)
         {
             aistate = AIState.Moving;
             return;
         }
 
         animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime); 
-        agent.speed = 4f;
+        agent.speed = 3f;
         agent.acceleration = 2f;
         agent.stoppingDistance = 0.3f;
-        agent.SetDestination(player.position);
+        agent.SetDestination(target.position);
     }
 
-    private void HandleAttackingState(float distanceToPlayer)
+    private void HandleAttackingState(float distanceToTarget)
     {
-        if (distanceToPlayer > disengageRange)
+        if (distanceToTarget > disengageRange)
         {
             aistate = AIState.Moving;
             return;
@@ -133,6 +138,36 @@ public class ZombieAI : MonoBehaviour, IDamageable
             //And inside of the EventManager it takes care of;  1. changing the health value 2.play audio 3. play visual effects.
         }
     }
+
+    private void UpdateTarget()
+    {
+        Transform closestHostage = null;
+        float closestHostageDistance = Mathf.Infinity;
+
+        foreach (GameObject hostage in hostages)
+        {
+            if (hostage == null) continue;
+
+            float dist = Vector3.Distance(transform.position, hostage.transform.position);
+            if (dist < closestHostageDistance)
+            {
+                closestHostageDistance = dist;
+                closestHostage = hostage.transform;
+            }
+        }
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        if (closestHostage != null && closestHostageDistance < distanceToPlayer)
+        {
+            target = closestHostage;
+        }
+        else
+        {
+            target = player;
+        }
+    }
+
     public void TakeDamage(float amount)
     {
         if (isDead) return;
