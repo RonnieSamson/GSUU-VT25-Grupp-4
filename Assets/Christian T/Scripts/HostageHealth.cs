@@ -8,7 +8,6 @@ public class HostageHealth : MonoBehaviour, IDamageable
     private bool isDead = false;
     public GameOverUIManager gameOverUIManager;
 
-
     private HostageController hostageController;
 
     void Start()
@@ -46,12 +45,12 @@ public class HostageHealth : MonoBehaviour, IDamageable
 
         Debug.Log("Hostagen dog.");
 
-        // Visa Game Over-skärmen
+        // Pausa spelet och visa UI på samma sätt som för player
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (gameOverUIManager != null)
             gameOverUIManager.ShowGameOverScreen();
-
-        Destroy(gameObject);
-
     }
-
 }

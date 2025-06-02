@@ -7,7 +7,6 @@ public class RescueManager : MonoBehaviour
     private int totalHostages = 0;
 
     public TextMeshProUGUI uiText;
-
     public GameOverUIManager gameOverUIManager;
 
     void Start()
@@ -22,19 +21,24 @@ public class RescueManager : MonoBehaviour
         UpdateUIText();
 
         if (rescuedHostages >= totalHostages)
-{
-    Debug.Log("Alla hostages är räddade!");
-    if (gameOverUIManager != null)
-    {
-        Debug.Log("Visar WinScreen");
-        gameOverUIManager.ShowWinScreen();
-    }
-    else
-    {
-        Debug.LogWarning("GameOverUIManager är null i RescueManager!");
-    }
-}
+        {
+            Debug.Log("Alla hostages är räddade!");
 
+            // Pausa spelet och lås upp musen
+            Time.timeScale = 0f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            if (gameOverUIManager != null)
+            {
+                Debug.Log("Visar WinScreen");
+                gameOverUIManager.ShowWinScreen();
+            }
+            else
+            {
+                Debug.LogWarning("GameOverUIManager är null i RescueManager!");
+            }
+        }
     }
 
     private void UpdateUIText()
