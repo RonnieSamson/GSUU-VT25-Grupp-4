@@ -28,8 +28,8 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     private const float attackRange = 2f;
     private const float disengageRange = 3f;
-    private const float chaseDistance = 8f;
-    private const float stopChasingDistance = 12f;
+    private const float chaseDistance = 80f;
+    private const float stopChasingDistance = 120f;
 
     private bool isDead = false;
 
