@@ -14901,14 +14901,14 @@ RectTransform:
   m_GameObject: {fileID: 1024861791}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.26834765, y: 0.26834765, z: 0.26834765}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2119357263}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 22.138672, y: -15.027405}
+  m_AnchoredPosition: {x: 50, y: -35}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1024861793
@@ -18769,7 +18769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d773009b4e525b8439d535d049b2c322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 1483718126}
   fullHeartPrefab: {fileID: 2394934678640157628, guid: b44fd3c6fe3dafe4eb6f074965db59f9, type: 3}
   halfHeartPrefab: {fileID: 7749167779058658984, guid: 4715d44f29810504fac2701d085f9b5e, type: 3}
   emptyHeartPrefab: {fileID: 4827531455411407024, guid: 6c8983faf6ba6ab448f32d46c066b6ca, type: 3}
@@ -18786,7 +18786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf03af4543bf614b872fd45862208b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 1483718126}
   healthText: {fileID: 0}
 --- !u!4 &1238892186 stripped
 Transform:
