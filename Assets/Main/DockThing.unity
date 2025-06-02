@@ -13098,6 +13098,10 @@ PrefabInstance:
       propertyPath: uiText
       value: 
       objectReference: {fileID: 426885414}
+    - target: {fileID: 7110860869894548140, guid: 583a25b87ae9bc342870cf43b1d39549, type: 3}
+      propertyPath: gameOverUIManager
+      value: 
+      objectReference: {fileID: 1237946817}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25979,8 +25983,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6527617668475243745, guid: 9465253e095e630479519de8d7a8e620, type: 3}
       propertyPath: maxHealth
-      value: 35
+      value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6527617668475243745, guid: 9465253e095e630479519de8d7a8e620, type: 3}
+      propertyPath: gameOverUIManager
+      value: 
+      objectReference: {fileID: 1237946817}
     - target: {fileID: 7110411695311218504, guid: 9465253e095e630479519de8d7a8e620, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.92
