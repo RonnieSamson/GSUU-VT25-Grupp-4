@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zombieHealth: 100
-  zombieDamage: 10
+  zombieDamage: 0.5
   attackCooldown: 2
   ragdollBodies:
   - {fileID: 9095170040873026820}

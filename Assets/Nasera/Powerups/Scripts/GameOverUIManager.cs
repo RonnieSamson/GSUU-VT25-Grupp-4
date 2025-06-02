@@ -8,11 +8,14 @@ public class GameOverUIManager : MonoBehaviour
 
     public void TryAgain()
     {
+        Debug.Log("TryAgain click");
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void GoToMainMenu()
     {
+        Debug.Log("MainMenu click");
         SceneManager.LoadScene("MainMenu");
     }
 

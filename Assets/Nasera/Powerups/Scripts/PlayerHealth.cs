@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
     public float currentHealth = 3f;
     public float maxHealth = 3f;
@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
 
     public HeartsUIManager heartsUIManager;
     public GameObject gameOverPanel;
+    public PLayerController playerController;
     void Start()
     {
         currentHealth = maxHealth;
@@ -32,7 +33,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
 
-    public void DecreaseHealth(float amount)
+    public void TakeDamage(float amount)
     {
         currentHealth -= amount;
         if (currentHealth < 0)
@@ -44,7 +45,10 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth == 0)
         {
             Debug.Log("Player died!");
-            gameObject.SetActive(false);
+            playerController.isAlive = false;
+            Time.timeScale = 0f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
 
             if (gameOverPanel != null)
