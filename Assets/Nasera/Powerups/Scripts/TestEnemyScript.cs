@@ -11,7 +11,7 @@ public class TestEnemyScript : MonoBehaviour
             PlayerHealth health = other.GetComponent<PlayerHealth>();
             if (health != null)
             {
-                health.DecreaseHealth(0.5f);
+                health.TakeDamage(0.5f);
                 Debug.Log("Player damaged!");
             }
         }

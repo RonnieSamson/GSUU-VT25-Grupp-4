@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
     public float currentHealth = 3f;
     public float maxHealth = 3f;
@@ -33,7 +33,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
 
-    public void DecreaseHealth(float amount)
+    public void TakeDamage(float amount)
     {
         currentHealth -= amount;
         if (currentHealth < 0)
@@ -46,7 +46,9 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("Player died!");
             playerController.isAlive = false;
+            Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
 
             if (gameOverPanel != null)

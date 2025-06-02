@@ -136,15 +136,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
     }
 
-        if (target.CompareTag("Player"))
-        {
-            PlayerHealth health = target.GetComponent<PlayerHealth>();
-            if (health != null)
-            {
-                health.DecreaseHealth(zombieDamage);
-                Debug.Log("Player damaged!");
-            }
-        }
         if (distanceToTarget > disengageRange)
     {
         aistate = AIState.Moving;
@@ -156,6 +147,15 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     if (Time.time >= lastAttackTime + attackCooldown)
     {
+        //if (target.CompareTag("Player"))
+        //{
+        //    PlayerHealth health = target.GetComponent<PlayerHealth>();
+        //    if (health != null)
+        //    {
+        //        health.DecreaseHealth(zombieDamage);
+        //        Debug.Log("Player damaged!");
+        //    }
+        //}
         animator.SetTrigger("IsAttacking");
         lastAttackTime = Time.time;
 

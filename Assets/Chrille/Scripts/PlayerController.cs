@@ -20,7 +20,7 @@ public class PLayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         if (rb == null)
