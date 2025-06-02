@@ -15,6 +15,9 @@ public class Weapon : MonoBehaviour
     private int totalAmmo;
     private int totalMagazines;
     private bool isReloading = false;
+    public AudioClip shootSound;
+    private AudioSource audioSource;
+
     public int GetCurrentAmmo()
     {
         return currentAmmo;
@@ -30,6 +33,7 @@ public class Weapon : MonoBehaviour
     {
         currentAmmo = weaponData.maxAmmo;
         totalAmmo = weaponData.maxAmmo * 2;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -89,6 +93,9 @@ public class Weapon : MonoBehaviour
     void Shoot()
     {
         currentAmmo--;
+
+        if (audioSource != null && shootSound != null)
+        audioSource.PlayOneShot(shootSound);
 
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         Debug.DrawRay(ray.origin, ray.direction * weaponData.range, Color.red, 1f); //Debug for seeing where the raycast hits
