@@ -4,11 +4,8 @@ using System.Collections;
 public class ZombieSpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    [Tooltip("Prefab of the zombie to spawn. Must be tagged \"Zombie\".")]
     public GameObject zombiePrefab;
-    [Tooltip("Seconds between each spawn attempt.")]
-    public float spawnInterval = 1f;
-    [Tooltip("Maximum number of zombies to have on the map.")]
+    public float spawnInterval = 3f;
     public int maxZombies = 40;
 
     [Header("Optional Spawn Points")]
@@ -19,7 +16,6 @@ public class ZombieSpawner : MonoBehaviour
 
     private void Start()
     {
-        // Begin the spawning coroutine when the scene starts.
         _spawnRoutine = StartCoroutine(SpawnZombiesUntilMax());
     }
 
@@ -28,7 +24,7 @@ public class ZombieSpawner : MonoBehaviour
         // Continuously attempt to spawn as long as we have fewer than maxZombies active.
         while (true)
         {
-            // Count how many active GameObjects are tagged "Zombie"
+            // how many active GameObjects are tagged with "Zombie"
             int currentCount = GameObject.FindGameObjectsWithTag("Zombie").Length;
 
             if (currentCount < maxZombies)
@@ -37,11 +33,11 @@ public class ZombieSpawner : MonoBehaviour
             }
             else
             {
-                // We have reached (or exceeded) the limit; stop spawning altogether.
+                // when at the limit, stop spawning
                 yield break;
             }
 
-            // Wait one second before attempting the next spawn.
+            // Wait the interval before attempting the next spawn.
             yield return new WaitForSeconds(spawnInterval);
         }
     }
@@ -58,26 +54,17 @@ public class ZombieSpawner : MonoBehaviour
         }
         else
         {
-            // No spawn points set → use this GameObject's position.
+            // if no spawn set then use this position
             spawnPosition = transform.position;
         }
 
-        // Instantiate the zombie prefab at the chosen position, with no rotation.
+        // instantiate the zombie prefab at the chosen position with no rotation.
         GameObject newZombie = Instantiate(zombiePrefab, spawnPosition, Quaternion.identity);
 
-        // (Optional) Ensure the spawned object is tagged correctly.
+        // tag correctly.
         if (!newZombie.CompareTag("Zombie"))
         {
             newZombie.tag = "Zombie";
         }
     }
-
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        // Sanity‐check so that maxZombies is always at least 1, and spawnInterval is positive.
-        if (maxZombies < 1) maxZombies = 1;
-        if (spawnInterval < 0.1f) spawnInterval = 0.1f;
-    }
-#endif
 }
