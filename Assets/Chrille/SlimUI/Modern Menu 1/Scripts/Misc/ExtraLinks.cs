@@ -8,9 +8,9 @@ namespace SlimUI.ModernMenu{
     {
 
         
-        public void OpenChrille()
+        public void OpenIntro()
         {
-            SceneManager.LoadScene("Chrille");
+            SceneManager.LoadScene("Intro");
         }
         
         public void OpenDockThing()
