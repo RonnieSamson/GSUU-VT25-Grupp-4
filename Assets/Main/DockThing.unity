@@ -10830,7 +10830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2663471578770995397, guid: 44d3fa1c4edbde74a897dab57e80b73b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5527976391812792103, guid: 44d3fa1c4edbde74a897dab57e80b73b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10838,11 +10838,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5527976391812792103, guid: 44d3fa1c4edbde74a897dab57e80b73b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.067
       objectReference: {fileID: 0}
     - target: {fileID: 5527976391812792103, guid: 44d3fa1c4edbde74a897dab57e80b73b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5527976391812792103, guid: 44d3fa1c4edbde74a897dab57e80b73b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30485,6 +30485,10 @@ PrefabInstance:
     - target: {fileID: 4730384311949239886, guid: f115af9f6d59ac140bf7281492ea8c68, type: 3}
       propertyPath: m_Name
       value: Pistol 92 Dark
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730384311949239886, guid: f115af9f6d59ac140bf7281492ea8c68, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5192815900266272252, guid: f115af9f6d59ac140bf7281492ea8c68, type: 3}
       propertyPath: m_LocalPosition.x
