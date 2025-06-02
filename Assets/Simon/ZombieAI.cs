@@ -7,7 +7,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     [Header("Zombie Settings")]
     public float zombieHealth = 100f;
-    public float zombieDamage = 10f;
+    public float zombieDamage = 0.5f;
     public float attackCooldown = 1.5f;
 
     [Header("Ragdoll")]
@@ -136,7 +136,16 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
     }
 
-    if (distanceToTarget > disengageRange)
+        if (target.CompareTag("Player"))
+        {
+            PlayerHealth health = target.GetComponent<PlayerHealth>();
+            if (health != null)
+            {
+                health.DecreaseHealth(zombieDamage);
+                Debug.Log("Player damaged!");
+            }
+        }
+        if (distanceToTarget > disengageRange)
     {
         aistate = AIState.Moving;
         return;

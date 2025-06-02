@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
 
     public HeartsUIManager heartsUIManager;
     public GameObject gameOverPanel;
+    public PLayerController playerController;
     void Start()
     {
         currentHealth = maxHealth;
@@ -44,7 +45,8 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth == 0)
         {
             Debug.Log("Player died!");
-            gameObject.SetActive(false);
+            playerController.isAlive = false;
+            Cursor.lockState = CursorLockMode.None;
 
 
             if (gameOverPanel != null)

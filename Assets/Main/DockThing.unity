@@ -22441,6 +22441,10 @@ PrefabInstance:
       propertyPath: near clip plane
       value: 0.01
       objectReference: {fileID: 0}
+    - target: {fileID: 4739574673994271854, guid: ed089483223de44499b086d411356688, type: 3}
+      propertyPath: isAlive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6067252613479026959, guid: ed089483223de44499b086d411356688, type: 3}
       propertyPath: m_Name
       value: Player
@@ -22529,6 +22533,18 @@ MonoBehaviour:
   maxHealth: 3
   heartsUIManager: {fileID: 1237946818}
   gameOverPanel: {fileID: 896738053}
+  playerController: {fileID: 1483718131}
+--- !u!114 &1483718131 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4739574673994271854, guid: ed089483223de44499b086d411356688, type: 3}
+  m_PrefabInstance: {fileID: 1483718123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483718125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 853db6956bee8b74d85a7684e71659ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1485929510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}

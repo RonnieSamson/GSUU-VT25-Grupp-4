@@ -16,6 +16,7 @@ public class PLayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 moveDirection;
     private bool isGrounded;
+    public bool isAlive = true;
 
     void Start()
     {
@@ -32,12 +33,15 @@ public class PLayerController : MonoBehaviour
 
     void Update()
     {
-        PlayerInput();
-        GroundCheck();
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
+       if (isAlive)
         {
-            Jump();
+            PlayerInput();
+            GroundCheck();
+
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                Jump();
+            }
         }
     }
 
