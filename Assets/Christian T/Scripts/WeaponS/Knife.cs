@@ -5,7 +5,16 @@ public class Knife : MonoBehaviour
     public WeaponData weaponData;
     public Animator animator;
 
+    public AudioClip slashSound;      // Spelas vid miss
+    public AudioClip hitSound;        // Spelas vid träff
+    private AudioSource audioSource;
+
     private float nextAttackTime = 0f;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -30,8 +39,20 @@ public class Knife : MonoBehaviour
             if (target != null)
             {
                 target.TakeDamage(weaponData.damage);
+
+                if (audioSource != null && hitSound != null)
+                    audioSource.PlayOneShot(hitSound);
+            }
+            else
+            {
+                if (audioSource != null && slashSound != null)
+                    audioSource.PlayOneShot(slashSound);
             }
         }
+        else
+        {
+            if (audioSource != null && slashSound != null)
+                audioSource.PlayOneShot(slashSound);
+        }
     }
-
 }
