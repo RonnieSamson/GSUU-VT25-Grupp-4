@@ -3,6 +3,7 @@ using UnityEngine;
 public class WeaponSwitcher : MonoBehaviour
 {
     public GameObject[] weapons;
+    public Animator rightArmAnimator; // <- Dra in din RightArm Animator här i Inspector
     private int currentWeaponIndex = 0;
 
     void Start()
@@ -13,7 +14,7 @@ public class WeaponSwitcher : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            SelectWeapon(0); // Kniv
+            SelectWeapon(0); // Knife
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
             SelectWeapon(1); // Pistol
@@ -30,5 +31,11 @@ public class WeaponSwitcher : MonoBehaviour
         }
 
         currentWeaponIndex = index;
+
+
+        if (rightArmAnimator != null)
+        {
+            rightArmAnimator.SetInteger("WeaponType", index);
+        }
     }
 }
