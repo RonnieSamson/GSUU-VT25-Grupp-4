@@ -6,10 +6,11 @@ namespace SlimUI.ModernMenu{
 
     public class ExtraLinks : MonoBehaviour
     {
-
         
+
         public void OpenIntro()
         {
+            
             SceneManager.LoadScene("Intro");
         }
         

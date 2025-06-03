@@ -6,15 +6,17 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public float currentHealth = 3f;
     public float maxHealth = 3f;
 
+    public bool isAlive = true;
+
 
     public HeartsUIManager heartsUIManager;
     public GameObject gameOverPanel;
-    public PLayerController playerController;
+    public PlayerController playerController;
     void Start()
     {
         currentHealth = maxHealth;
 
-        // Visa hjärtan direkt när spelet startar
+        // Visa hjï¿½rtan direkt nï¿½r spelet startar
         if (heartsUIManager != null)
             heartsUIManager.UpdateHearts();
 

@@ -5,6 +5,14 @@ public class ZombieAI : MonoBehaviour, IDamageable
 {
     public enum AIState { Idle, Moving, Running, Attacking }
 
+    [Header("Zombie Sounds")]
+    public AudioClip[] ambientSounds; // Här kan du dra in dina 6 (eller fler) ljudklipp
+    public float minAmbientSoundInterval = 5f;
+    public float maxAmbientSoundInterval = 15f;
+
+    private AudioSource audioSource;
+    private float nextAmbientSoundTime;
+
     [Header("Zombie Settings")]
     public float zombieHealth = 100f;
     public float zombieDamage = 0.5f;
@@ -40,12 +48,27 @@ public class ZombieAI : MonoBehaviour, IDamageable
         player = GameObject.FindGameObjectWithTag("Player").transform;
         hostages = GameObject.FindGameObjectsWithTag("Hostage");
 
+        // Hämta eller lägg till AudioSource-komponenten
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogWarning("ZombieAI saknar en AudioSource-komponent. Lägger till en automatiskt.", this);
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        // Ställ in AudioSource-egenskaper om du vill, t.ex. 3D-ljud
+        audioSource.spatialBlend = 1.0f; // Fullt 3D-ljud
+
         DisableRagdoll();
+
+        // Sätt en initial tid för första ambient-ljudet (så det inte startar direkt på 0s)
+        nextAmbientSoundTime = Time.time + Random.Range(minAmbientSoundInterval * 0.25f, maxAmbientSoundInterval * 0.5f);
     }
 
     private void Update()
     {
         if (isDead) return;
+
+        HandleAmbientSounds(); // Hantera ambient-ljud
 
         UpdateTarget();
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
@@ -108,7 +131,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             return;
         }
 
-        animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime); 
+        animator.SetFloat("Speed", 1f, 0.3f, Time.deltaTime);
         agent.speed = 3f;
         agent.acceleration = 2f;
         agent.stoppingDistance = 0.3f;
@@ -117,59 +140,59 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     private void HandleAttackingState(float distanceToTarget)
     {
-    if (target == null || !target.gameObject.activeInHierarchy)
-    {
-        UpdateTarget(); 
-        aistate = AIState.Moving;
-        return;
-    }
-
-    //Slutar attackera om hostage sitter ner
-    if (target.CompareTag("Hostage"))
-    {
-        HostageController controller = target.GetComponent<HostageController>();
-        if (controller != null && controller.isSitting)
+        if (target == null || !target.gameObject.activeInHierarchy)
         {
-            Debug.Log("Zombie avbryter attack – hostagen sitter.");
-            aistate = AIState.Idle;
+            UpdateTarget();
+            aistate = AIState.Moving;
             return;
         }
-    }
+
+        //Slutar attackera om hostage sitter ner
+        if (target.CompareTag("Hostage"))
+        {
+            HostageController controller = target.GetComponent<HostageController>();
+            if (controller != null && controller.isSitting)
+            {
+                Debug.Log("Zombie avbryter attack – hostagen sitter.");
+                aistate = AIState.Idle;
+                return;
+            }
+        }
 
         if (distanceToTarget > disengageRange)
-    {
-        aistate = AIState.Moving;
-        return;
-    }
-
-    agent.SetDestination(transform.position); 
-    animator.SetFloat("Speed", 0f, 0.3f, Time.deltaTime);
-
-    if (Time.time >= lastAttackTime + attackCooldown)
-    {
-        //if (target.CompareTag("Player"))
-        //{
-        //    PlayerHealth health = target.GetComponent<PlayerHealth>();
-        //    if (health != null)
-        //    {
-        //        health.DecreaseHealth(zombieDamage);
-        //        Debug.Log("Player damaged!");
-        //    }
-        //}
-        animator.SetTrigger("IsAttacking");
-        lastAttackTime = Time.time;
-
-        IDamageable damageable = target.GetComponent<IDamageable>();
-        if (damageable != null && distanceToTarget <= attackRange)
         {
-            damageable.TakeDamage(zombieDamage);
-            Debug.Log("Zombie attackerade " + target.name + " och gjorde " + zombieDamage + " damage.");
+            aistate = AIState.Moving;
+            return;
         }
-        else
+
+        agent.SetDestination(transform.position);
+        animator.SetFloat("Speed", 0f, 0.3f, Time.deltaTime);
+
+        if (Time.time >= lastAttackTime + attackCooldown)
         {
-            Debug.Log("Target saknar IDamageable eller är utanför räckvidd.");
+            //if (target.CompareTag("Player"))
+            //{
+            //    PlayerHealth health = target.GetComponent<PlayerHealth>();
+            //    if (health != null)
+            //    {
+            //        health.DecreaseHealth(zombieDamage);
+            //        Debug.Log("Player damaged!");
+            //    }
+            //}
+            animator.SetTrigger("IsAttacking");
+            lastAttackTime = Time.time;
+
+            IDamageable damageable = target.GetComponent<IDamageable>();
+            if (damageable != null && distanceToTarget <= attackRange)
+            {
+                damageable.TakeDamage(zombieDamage);
+                Debug.Log("Zombie attackerade " + target.name + " och gjorde " + zombieDamage + " damage.");
+            }
+            else
+            {
+                Debug.Log("Target saknar IDamageable eller är utanför räckvidd.");
+            }
         }
-    }
     }
 
     private void UpdateTarget()
@@ -247,6 +270,31 @@ public class ZombieAI : MonoBehaviour, IDamageable
         foreach (var rb in ragdollBodies)
         {
             rb.isKinematic = true;
+        }
+    }
+    
+    private void HandleAmbientSounds()
+    {
+        // Se till att vi har allt som behövs och att inget ljud redan spelas på denna AudioSource
+        if (audioSource == null || ambientSounds == null || ambientSounds.Length == 0 || audioSource.isPlaying)
+        {
+            return;
+        }
+
+        if (Time.time >= nextAmbientSoundTime)
+        {
+            // Välj ett slumpmässigt ljud från listan
+            int randomIndex = Random.Range(0, ambientSounds.Length);
+            AudioClip clipToPlay = ambientSounds[randomIndex];
+
+            if (clipToPlay != null)
+            {
+                audioSource.PlayOneShot(clipToPlay); // PlayOneShot tillåter flera ljud att överlappa om du anropar det snabbt
+                                                    // men vår 'audioSource.isPlaying' check ovan förhindrar detta för ambienta ljud.
+            }
+            
+            // Sätt tiden för nästa ambient-ljud
+            nextAmbientSoundTime = Time.time + Random.Range(minAmbientSoundInterval, maxAmbientSoundInterval);
         }
     }
 }

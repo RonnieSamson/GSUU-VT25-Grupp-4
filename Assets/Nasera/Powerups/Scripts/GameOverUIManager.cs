@@ -14,10 +14,10 @@ public class GameOverUIManager : MonoBehaviour
     }
 
     public void GoToMainMenu()
-    {
-        Debug.Log("MainMenu click");
-        SceneManager.LoadScene("MainMenu");
-    }
+{
+    Time.timeScale = 1f; // Återställ tidsskalan
+    SceneManager.LoadScene("MainMenu");
+}
 
     public void ShowGameOverScreen()
     {

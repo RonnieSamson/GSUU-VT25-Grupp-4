@@ -124,8 +124,8 @@ public class Weapon : MonoBehaviour
 
         if (animator != null)
         {
-            animator.SetBool("Shoot", true);
-            StartCoroutine(ResetBool("Shoot", 1f / weaponData.fireRate));
+            animator.SetTrigger("Shoot");
+            StartCoroutine(ResetBool("Shoot", 2f / weaponData.fireRate));
         }
     }
     public void AddMagazine(int amount)

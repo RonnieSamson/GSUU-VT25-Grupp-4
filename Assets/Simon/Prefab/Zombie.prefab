@@ -68,6 +68,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47865803a8964f045b55fd6bab2dd655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ambientSounds:
+  - {fileID: 8300000, guid: bd879b02c863af54eaebc8db90b69675, type: 3}
+  - {fileID: 8300000, guid: ad72c5a7dfc6b7c4fa051d1d151fc5aa, type: 3}
+  - {fileID: 8300000, guid: 09e4cb9e252b64d408dea1def9a18b70, type: 3}
+  - {fileID: 8300000, guid: f37ba246c094e8647932143bd2d9b535, type: 3}
+  - {fileID: 8300000, guid: ae403a3d8cf330a48b34b5248468f3b9, type: 3}
+  - {fileID: 8300000, guid: 01797299e14d82b4eb03f00bd2c63061, type: 3}
+  minAmbientSoundInterval: 5
+  maxAmbientSoundInterval: 15
   zombieHealth: 100
   zombieDamage: 0.5
   attackCooldown: 2
