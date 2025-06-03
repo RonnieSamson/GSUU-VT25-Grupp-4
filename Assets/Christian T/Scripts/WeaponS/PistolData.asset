@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812293fde3811324fa7f1bfcc58e4b51, type: 3}
   m_Name: PistolData
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 50
   range: 1000
   fireRate: 2
   reloadTime: 1.5
